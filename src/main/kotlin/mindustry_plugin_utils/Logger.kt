@@ -11,43 +11,60 @@ import java.nio.file.Path
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Logger(configRelativePath: String) {
+public class Logger(configRelativePath: String) {
     private var config: Config
     private var format: SimpleDateFormat
 
     init {
-        config = Klaxon().parse<Config>(File(configRelativePath)) ?: Config()
+        try {
+            config =  Klaxon().parse<Config>(File(configRelativePath))!!
+        } catch (e: Exception) {
+            config = Config()
+            log("error when opening config file: " + e.message)
+            verbose {
+                e.printStackTrace()
+            }
+        }
+
         format = SimpleDateFormat(config.time_format)
     }
 
-    fun <T> run(type: Class<T>, listener: Cons<T>) {
+    fun run(r: Runnable) {
+        try {
+            r.run()
+        } catch (e: Exception) {
+            ex(e)
+        }
+    }
+
+    fun <T> run(type: Class<T>, listener: (T) -> Unit) {
         Events.on(type) {
             try {
-                listener.get(it)
+                listener.invoke(it)
             } catch (e: Exception) {
                 ex(e)
             }
         }
     }
 
-    fun <T> fire(kind: Class<*>, listener: Runnable) {
+    fun <T> fire(kind: Class<*>, listener: () -> Unit) {
         Events.fire(kind) {
             try {
-                listener.run()
+                listener.invoke()
             } catch (e: Exception) {
                 ex(e)
             }
         }
     }
 
-    fun ex(t: Throwable) {
+    private fun ex(t: Throwable) {
         val time = time()
         val f = when (config.type) {
             "log" -> {
                 Path.of(config.output, time.substring(0, time.lastIndexOf("/"))).toFile()
             }
             else -> {
-                Path.of(config.output, time).toFile()
+                Path.of(config.output, t.message, time).toFile()
             }
         }
 
@@ -57,8 +74,14 @@ class Logger(configRelativePath: String) {
             f.createNewFile()
         }
 
+        val ex = exToString(t)
+
         f.appendText(">>> [$time]\n")
-        f.appendText(exToString(t))
+        f.appendText(ex)
+
+        if(config.print) {
+            println(ex)
+        }
     }
 
     private fun exToString(t: Throwable): String {
@@ -75,9 +98,22 @@ class Logger(configRelativePath: String) {
     }
 
 
+    private fun verbose(r: () -> Unit) {
+        if(config.verbose) r.invoke()
+        else log("Add '\"verbose\": true' to config file to see the stacktrace.")
+    }
+
+    private fun <T> log(value: T) {
+        print("Logger:: ")
+        println(value)
+    }
+
+
     class Config(
         val output: String = "logOutput",
         val type: String = "default",
-        val time_format: String = "yyyy-MM-dd/hh/mm:ss:fff"
+        val time_format: String = "yyyy-MM-dd/hh/mm:ss:SSS",
+        val verbose: Boolean = false,
+        val print: Boolean = true
     )
 }
