@@ -1,5 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.3.72"
+    java
+    kotlin("jvm") version "1.4.10"
+    id("maven-publish")
 }
 
 repositories {
