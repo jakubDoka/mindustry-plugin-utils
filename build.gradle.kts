@@ -9,8 +9,9 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    compileOnly("com.github.Anuken.Arc:arc-core:v104.6")
-    compileOnly("com.github.Anuken.Mindustry:core:v104.6")
+    compileOnly("com.github.Anuken.Arc:arc-core:v126.2")
+    compileOnly("com.github.Anuken.Mindustry:core:v126.2")
+    implementation("com.beust:klaxon:5.5")
 }
 
 tasks {
