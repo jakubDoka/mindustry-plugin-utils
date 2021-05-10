@@ -1,3 +1,5 @@
+package mindustry_plugin_utils
+
 import arc.Events
 import arc.func.Cons
 import com.beust.klaxon.Klaxon
