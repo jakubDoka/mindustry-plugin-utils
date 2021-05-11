@@ -53,7 +53,7 @@ class Logger(configRelativePath: String) {
         }
     }
 
-    fun <T> fire(kind: Class<*>, listener: () -> Unit) {
+    fun <T> on(kind: Class<*>, listener: () -> Unit) {
         Events.fire(kind) {
             try {
                 listener.invoke()
