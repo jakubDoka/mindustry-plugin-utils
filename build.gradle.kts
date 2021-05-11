@@ -2,7 +2,6 @@ plugins {
     java
     kotlin("jvm") version "1.4.31"
     id("maven-publish")
-    id("org.jetbrains.dokka") version "1.4.10.2"
 }
 
 repositories {
@@ -55,24 +54,6 @@ val myLicenseUrl = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
 val myDeveloperName = "Jakub Dóka"
 
-val sourcesJar by tasks.creating(Jar::class) {
-    archiveClassifier.set("sources")
-    from(sourceSets.getByName("main").allSource)
-    from("LICENCE.md") {
-        into("META-INF")
-    }
-}
-
-val dokkaJavadocJar by tasks.creating(Jar::class) {
-    dependsOn(tasks.dokkaJavadoc)
-    from(tasks.dokkaJavadoc.get().outputDirectory.get())
-    archiveClassifier.set("javadoc")
-}
-
-// More info on `publishing`:
-//   https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:resolved_dependencies
-// More info on authenticating with personal access token (myDeveloperId and myArtifactName must be lowercase):
-//   https://docs.github.com/en/packages/guides/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages
 publishing {
     repositories {
         maven {
@@ -94,9 +75,6 @@ publishing {
             version = myArtifactVersion
 
             from(components["java"])
-
-            artifact(sourcesJar)
-            artifact(dokkaJavadocJar)
 
             pom {
                 packaging = "jar"
