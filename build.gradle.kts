@@ -1,6 +1,6 @@
 plugins {
-    `maven-publish`
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.10"
+    id("maven-publish")
 }
 
 repositories {
@@ -25,9 +25,5 @@ tasks {
 
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
-    }
-
-    jar {
-        from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     }
 }

@@ -1,7 +1,6 @@
 package mindustry_plugin_utils
 
 import arc.Events
-import arc.func.Cons
 import com.beust.klaxon.Klaxon
 import java.io.File
 import arc.util.Time
@@ -11,7 +10,7 @@ import java.nio.file.Path
 import java.text.SimpleDateFormat
 import java.util.*
 
-public class Logger(configRelativePath: String) {
+class Logger(configRelativePath: String) {
     private var config: Config
     private var format: SimpleDateFormat
 
