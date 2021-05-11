@@ -43,20 +43,20 @@ class Logger(configRelativePath: String) {
         }
     }
 
-    fun <T> run(type: Class<T>, listener: (T) -> Unit) {
-        Events.on(type) {
+    fun run(type: Class<*>, listener: () -> Unit) {
+        Events.run(type) {
             try {
-                listener.invoke(it)
+                listener.invoke()
             } catch (e: Exception) {
                 ex(e)
             }
         }
     }
 
-    fun <T> on(kind: Class<T>, listener: () -> Unit) {
+    fun <T> on(kind: Class<T>, listener: (T) -> Unit) {
         Events.on(kind) {
             try {
-                listener.invoke()
+                listener.invoke(it)
             } catch (e: Exception) {
                 ex(e)
             }
