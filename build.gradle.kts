@@ -1,4 +1,5 @@
 plugins {
+    java
     kotlin("jvm") version "1.4.31"
     id("maven-publish")
 }
@@ -20,10 +21,10 @@ dependencies {
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "14"
+        kotlinOptions.jvmTarget = "1.8"
     }
 
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "14"
+        kotlinOptions.jvmTarget = "1.8"
     }
 }
