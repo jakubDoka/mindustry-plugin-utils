@@ -10,11 +10,12 @@ repositories {
 }
 
 var junitVersion = "5.6.1"
+var mindustryVer = "v126.2"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    compileOnly("com.github.Anuken.Arc:arc-core:v126.2")
-    compileOnly("com.github.Anuken.Mindustry:core:v126.2")
+    compileOnly("com.github.Anuken.Arc:arc-core:$mindustryVer")
+    compileOnly("com.github.Anuken.Mindustry:core:$mindustryVer")
     implementation("com.beust:klaxon:5.5")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))

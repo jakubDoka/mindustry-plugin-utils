@@ -13,19 +13,26 @@ import java.util.*
 class Logger(configRelativePath: String) {
     private var config: Config
     private var format: SimpleDateFormat
+    private lateinit var messenger: Messenger
 
     init {
         try {
             config =  Klaxon().parse<Config>(File(configRelativePath))!!
+            initMessenger(config.verbose)
         } catch (e: Exception) {
             config = Config()
-            log("error when opening config file: " + e.message)
-            verbose {
+            initMessenger(false)
+            messenger.log("error when opening config file: " + e.message)
+            messenger.verbose {
                 e.printStackTrace()
             }
         }
 
         format = SimpleDateFormat(config.time_format)
+    }
+
+    private fun initMessenger(verbose: Boolean) {
+        messenger = Messenger("Logger", "add '\"verbose\": true' to config to see error messages", verbose)
     }
 
     fun run(r: () -> Unit) {
@@ -73,8 +80,8 @@ class Logger(configRelativePath: String) {
                 f.mkdirs()
                 f = File(f, "lig.txt")
                 f.createNewFile()
-                log(f.exists())
-                log(f.absolutePath)
+                messenger.log(f.exists())
+                messenger.log(f.absolutePath)
 
             }
 
@@ -88,7 +95,7 @@ class Logger(configRelativePath: String) {
                 println(ex)
             }
         } catch (e: Exception) {
-            log("Unable to create file.")
+            messenger.log("Unable to create file.")
             e.printStackTrace()
         }
     }
@@ -105,17 +112,6 @@ class Logger(configRelativePath: String) {
     private fun time(): String {
         return format.format(Date(Time.millis()))
     }
-
-    private fun verbose(r: () -> Unit) {
-        if(config.verbose) r.invoke()
-        else log("Add '\"verbose\": true' to config file to see the stacktrace.")
-    }
-
-    private fun <T> log(value: T) {
-        print("Logger:: ")
-        println(value)
-    }
-
 
     class Config(
         val output: String = "logOutput",
