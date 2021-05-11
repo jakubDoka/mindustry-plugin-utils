@@ -6,7 +6,7 @@ import java.io.File
 import arc.util.Time
 import java.lang.Exception
 import java.lang.StringBuilder
-import java.nio.file.Path
+import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,10 +60,10 @@ class Logger(configRelativePath: String) {
         val time = time()
         val f = when (config.type) {
             "log" -> {
-                Path.of(config.output, time.substring(0, time.lastIndexOf("/"))).toFile()
+                Paths.get(config.output, time.substring(0, time.lastIndexOf("/"))).toFile()
             }
             else -> {
-                Path.of(config.output, t.message, time).toFile()
+                Paths.get(config.output, t.message, time).toFile()
             }
         }
 
