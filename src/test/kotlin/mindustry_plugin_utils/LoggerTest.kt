@@ -1,7 +1,6 @@
 package mindustry_plugin_utils
 
 import org.junit.jupiter.api.*;
-import mindustry_plugin_utils.Logger;
 
 class LoggerTest{
 
@@ -9,6 +8,8 @@ class LoggerTest{
 
     @Test
     fun hello() {
-
+        logger.run {
+            throw Exception("huh ooo:")
+        }
     }
 }

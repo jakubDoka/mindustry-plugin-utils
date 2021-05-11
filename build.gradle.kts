@@ -17,6 +17,7 @@ dependencies {
     compileOnly("com.github.Anuken.Mindustry:core:v126.2")
     implementation("com.beust:klaxon:5.5")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testImplementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }
 
 tasks {
@@ -26,6 +27,13 @@ tasks {
 
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+    }
+
+    "test"(Test::class) {
+        useJUnitPlatform {
+            includeEngines("junit-jupiter")
+        }
+        reports.html.isEnabled = true
     }
 }
 

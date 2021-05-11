@@ -28,9 +28,9 @@ class Logger(configRelativePath: String) {
         format = SimpleDateFormat(config.time_format)
     }
 
-    fun run(r: Runnable) {
+    fun run(r: () -> Unit) {
         try {
-            r.run()
+            r.invoke()
         } catch (e: Exception) {
             ex(e)
         }
@@ -57,29 +57,39 @@ class Logger(configRelativePath: String) {
     }
 
     private fun ex(t: Throwable) {
-        val time = time()
-        val f = when (config.type) {
-            "log" -> {
-                Paths.get(config.output, time.substring(0, time.lastIndexOf("/"))).toFile()
+        try {
+            val time = time()
+            var f = when (config.type) {
+                "log" -> {
+                    Paths.get(config.output, time.substring(0, time.lastIndexOf("/"))).toFile()
+                }
+                else -> {
+                    Paths.get(config.output, t.message, time).toFile()
+                }
             }
-            else -> {
-                Paths.get(config.output, t.message, time).toFile()
+
+
+            if (!f.exists()) {
+                f.mkdirs()
+                f = File(f, "lig.txt")
+                f.createNewFile()
+                log(f.exists())
+                log(f.absolutePath)
+
             }
-        }
 
+            val ex = exToString(t)
 
-        if(!f.exists()) {
-            f.mkdirs()
-            f.createNewFile()
-        }
+            f.setWritable(true)
+            f.appendText(">>> [$time]\n")
+            f.appendText(ex)
 
-        val ex = exToString(t)
-
-        f.appendText(">>> [$time]\n")
-        f.appendText(ex)
-
-        if(config.print) {
-            println(ex)
+            if (config.print) {
+                println(ex)
+            }
+        } catch (e: Exception) {
+            log("Unable to create file.")
+            e.printStackTrace()
         }
     }
 
@@ -96,7 +106,6 @@ class Logger(configRelativePath: String) {
         return format.format(Date(Time.millis()))
     }
 
-
     private fun verbose(r: () -> Unit) {
         if(config.verbose) r.invoke()
         else log("Add '\"verbose\": true' to config file to see the stacktrace.")
@@ -111,7 +120,7 @@ class Logger(configRelativePath: String) {
     class Config(
         val output: String = "logOutput",
         val type: String = "default",
-        val time_format: String = "yyyy-MM-dd/hh/mm:ss:SSS",
+        val time_format: String = "yyyy-MM-dd/hh/mm-ss-SSS",
         val verbose: Boolean = false,
         val print: Boolean = true
     )
