@@ -1,6 +1,6 @@
 plugins {
     java
-    kotlin("jvm") version "1.4.31"
+    kotlin("jvm") version "1.4.10"
     id("maven-publish")
 }
 
@@ -17,6 +17,8 @@ dependencies {
     compileOnly("com.github.Anuken.Arc:arc-core:$mindustryVer")
     compileOnly("com.github.Anuken.Mindustry:core:$mindustryVer")
     implementation("com.beust:klaxon:5.5")
+    implementation("com.discord4j:discord4j-core:3.1.5")
+    testImplementation("com.discord4j:discord4j-core:3.1.5")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }
