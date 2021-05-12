@@ -1,6 +1,6 @@
 package mindustry_plugin_utils
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 class LoggerTest{
 
