@@ -4,6 +4,9 @@ import discord4j.core.DiscordClient
 import discord4j.core.GatewayDiscordClient
 import discord4j.core.`object`.entity.Message
 import discord4j.core.event.domain.message.MessageCreateEvent
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 class Handler(
     val token: String,
@@ -38,7 +41,6 @@ class Handler(
             c.run(message, arguments.subList(1, arguments.size))
         }
         gateway.onDisconnect().block()
-
     }
 
 
@@ -50,6 +52,7 @@ class Handler(
         var maxArgs = 0
         var minArgs = 0
         var attachment = false
+        var permissions = HashSet<String>()
 
         init {
             val parts = args.split(" ").filter{ it.isNotEmpty() }
@@ -71,6 +74,20 @@ class Handler(
         }
 
         fun check(message: Message, argumentCount: Int): String {
+            if(permissions.isNotEmpty()) {
+                val list = message.authorAsMember.block()?.roles?.collectList()?.block() ?: return "Unable to verify what roles you have. You are too dangerous."
+                var found = false
+                for (i in list) {
+                    if (permissions.contains(i.name)) {
+                        found = true
+                        break
+                    }
+                }
+                if (!found) {
+                    return "You don't have permission to use this command. You need one of ${Arrays.toString(permissions.toArray())}."
+                }
+            }
+
             if(attachment && message.attachments.isEmpty()) {
                 return "You are missing an attachment."
             }
