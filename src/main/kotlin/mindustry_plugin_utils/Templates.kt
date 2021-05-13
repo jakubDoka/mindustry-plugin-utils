@@ -22,4 +22,33 @@ object Templates {
     fun info(title: String, body: String, color: String = "orange"): String {
         return "[$color]==$title==[]\n\n$body"
     }
+
+    fun clean(string: String, begin: String?, end: String?): String {
+        var string = string
+        var fromBegin = 0
+        var fromEnd = 0
+        while (string.contains(begin!!)) {
+            val first = string.indexOf(begin, fromBegin)
+            val last = string.indexOf(end!!, fromEnd)
+            if (first == -1 || last == -1) break
+            if (first > last) {
+                fromBegin = first + 1
+                fromEnd = last + 1
+            }
+            string = string.substring(0, first) + string.substring(last + 1)
+        }
+        return string
+    }
+
+    fun cleanEmotes(string: String): String {
+        return clean(string, "<", ">")
+    }
+
+    fun cleanColors(string: String): String {
+        return clean(string, "[", "]")
+    }
+
+    fun cleanName(name: String): String? {
+        return cleanEmotes(cleanColors(name)).replace(" ", "_")
+    }
 }
