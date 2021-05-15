@@ -11,11 +11,7 @@ object Fs {
             f.parentFile.mkdirs()
             f.createNewFile()
             f.setWritable(true)
-            try {
-                f.writeText(Klaxon().toJsonObject(value).toJsonString(true))
-            } catch (e: Exception) {
-                f.writeText(Klaxon().parseJsonArray(Klaxon().toJsonString(value).reader()).toJsonString(true))
-            }
+            f.writeText(Klaxon().toJsonString(value))
         } catch (e: Exception) {
             println("Failed to create default config with path $path.")
             e.printStackTrace()
