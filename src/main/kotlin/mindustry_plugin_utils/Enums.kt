@@ -1,4 +1,4 @@
-package mindustry_plugin_utils.discord
+package mindustry_plugin_utils
 
 import java.lang.StringBuilder
 
@@ -16,6 +16,6 @@ object Enums {
         for (v in cl.enumConstants) {
             s.append(v).append(" ")
         }
-        return s.substring(0, s.length - 2)
+        return s.substring(0, s.length - 1)
     }
 }
