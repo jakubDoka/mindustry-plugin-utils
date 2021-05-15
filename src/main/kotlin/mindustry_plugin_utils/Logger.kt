@@ -43,7 +43,7 @@ class Logger(configRelativePath: String) {
         }
     }
 
-    fun run(type: Class<*>, listener: () -> Unit) {
+    fun run(type: Any, listener: () -> Unit) {
         Events.run(type) {
             try {
                 listener.invoke()
