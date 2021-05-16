@@ -14,4 +14,9 @@ class TemplatesTest {
         Testing.assert(page("a", arr, 5, 4), info("a", "15\n16\n17\n18\n19\n"))
         Testing.assert(page("a", arr, 7, 4), info("a", "14\n15\n16\n17\n18\n19\n"))
     }
+
+    @Test
+    fun transition() {
+        println(Templates.transition("and this works too", "fff", "f0f", "0f0", density = 3))
+    }
 }

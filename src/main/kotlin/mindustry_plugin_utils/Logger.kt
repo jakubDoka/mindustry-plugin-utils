@@ -26,6 +26,7 @@ class Logger(configRelativePath: String) {
             messenger.verbose {
                 e.printStackTrace()
             }
+            Fs.createDefault(configRelativePath, config)
         }
 
         format = SimpleDateFormat(config.time_format)
@@ -77,12 +78,8 @@ class Logger(configRelativePath: String) {
 
 
             if (!f.exists()) {
-                f.mkdirs()
-                f = File(f, "lig.txt")
+                f.parentFile.mkdirs()
                 f.createNewFile()
-                messenger.log(f.exists())
-                messenger.log(f.absolutePath)
-
             }
 
             val ex = exToString(t)
@@ -91,9 +88,9 @@ class Logger(configRelativePath: String) {
             f.appendText(">>> [$time]\n")
             f.appendText(ex)
 
-            if (config.print) {
-                println(ex)
-            }
+           messenger.verbose {
+               println(ex)
+           }
         } catch (e: Exception) {
             messenger.log("Unable to create file.")
             e.printStackTrace()
@@ -117,7 +114,6 @@ class Logger(configRelativePath: String) {
         val output: String = "logOutput",
         val type: String = "default",
         val time_format: String = "yyyy-MM-dd/hh/mm-ss-SSS",
-        val verbose: Boolean = false,
-        val print: Boolean = true
+        val verbose: Boolean = false
     )
 }
