@@ -19,7 +19,7 @@ object Fs {
     }
 
     fun Any.jsonToString(prettyPrint: Boolean = true): String{
-        var thisJsonString = Klaxon().toJsonString(this)
+        val thisJsonString = Klaxon().toJsonString(this)
         var result = thisJsonString
         if(prettyPrint) {
             result = if(thisJsonString.startsWith("[")){

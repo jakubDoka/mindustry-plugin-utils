@@ -9,8 +9,15 @@ class LoggerTest{
 
     private val logger = Logger("config.json")
 
+    init {
+        logger.config.kind = Logger.Kind.Log
+    }
+
     @Test
     fun hello() {
+        logger.run {
+            throw Exception("huh ooo:")
+        }
         logger.run {
             throw Exception("huh ooo:")
         }

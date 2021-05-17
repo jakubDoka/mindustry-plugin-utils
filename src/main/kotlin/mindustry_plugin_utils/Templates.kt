@@ -48,7 +48,7 @@ object Templates {
         return clean(string, "[", "]")
     }
 
-    fun cleanName(name: String): String? {
+    fun cleanName(name: String): String {
         return cleanEmotes(cleanColors(name)).replace(" ", "_")
     }
 

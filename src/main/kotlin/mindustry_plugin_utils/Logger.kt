@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Logger(configRelativePath: String) {
-    private var config: Config
+    var config: Config
     private var format: SimpleDateFormat
     private lateinit var messenger: Messenger
 
@@ -67,12 +67,12 @@ class Logger(configRelativePath: String) {
     private fun ex(t: Throwable) {
         try {
             val time = time()
-            var f = when (config.type) {
-                "log" -> {
+            val f = when (config.kind) {
+                Kind.Log -> {
                     Paths.get(config.output, time.substring(0, time.lastIndexOf("/"))).toFile()
                 }
                 else -> {
-                    Paths.get(config.output, t.message, time).toFile()
+                    Paths.get(config.output, time).toFile()
                 }
             }
 
@@ -100,7 +100,7 @@ class Logger(configRelativePath: String) {
     private fun exToString(t: Throwable): String {
         val sb = StringBuilder(t.message + "\n")
         for(st in t.stackTrace) {
-            sb.append(st).append("\n")
+            sb.append("\t").append(st).append("\n")
         }
 
         return sb.toString()
@@ -112,8 +112,12 @@ class Logger(configRelativePath: String) {
 
     class Config(
         val output: String = "logOutput",
-        val type: String = "default",
+        var kind: Kind = Kind.Default,
         val time_format: String = "yyyy-MM-dd/hh/mm-ss-SSS",
         val verbose: Boolean = false
     )
+
+    enum class Kind {
+        Default, Log
+    }
 }
