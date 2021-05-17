@@ -62,11 +62,6 @@ object Templates {
 
     fun transition(text: String, vararg colors: String, density: Int = 1): String {
         val pcs = Array(colors.size) { Color.parse(colors[it]) }
-        for(i in pcs) {
-            print(i.r)
-            print(i.g)
-            println(i.r)
-        }
         var segment = text.length / (pcs.size - 1)
         if(segment * pcs.size < text.length) {
             segment++
@@ -74,8 +69,6 @@ object Templates {
         val sb = StringBuilder()
         for(i in text.indices step density) {
             val index = i / segment
-            println(index)
-            println((i - index * segment).toDouble()/segment)
             sb
                 .append("[${pcs[index].l(pcs[min(index+1, pcs.size-1)], (i - index * segment).toDouble()/segment).toHex()}]")
                 .append(text.substring(i, min(i + density, text.length)))
@@ -98,7 +91,9 @@ object Templates {
                 else
                     hex
 
-                return when(hex.length) {
+
+
+                return when(h.length) {
                     3 -> Color(
                         hexToByte(h.substring(0, 1)),
                         hexToByte(h.substring(1, 2)),
@@ -116,8 +111,8 @@ object Templates {
 
             private fun hexToByte(str: String): Double {
                 return when(str.length) {
-                    1 -> hexValue(str[0]).toDouble() / 0x0f.toDouble()
-                    2 -> (hexValue(str[1]).toInt() or hexValue(str[0]).toInt().shl(4)).toDouble() / 0xFF.toDouble()
+                    1 -> hexValue(str[0]).toDouble() / 0x0f
+                    2 -> (hexValue(str[1]).toInt() or hexValue(str[0]).toInt().shl(4)).toDouble() / 0xFF
                     else -> 1.0
                 }
             }

@@ -17,6 +17,6 @@ class TemplatesTest {
 
     @Test
     fun transition() {
-        println(Templates.transition("and this works too", "fff", "f0f", "0f0", density = 3))
+        println(Templates.transition("and this works too", "#ffffff", "#ff00ff", "#00ff00", density = 3))
     }
 }
