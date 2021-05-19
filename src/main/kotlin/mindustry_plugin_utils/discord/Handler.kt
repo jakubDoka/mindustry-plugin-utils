@@ -32,7 +32,7 @@ class Handler(
             }
 
             val arguments = message.content.split(" ", limit = c.maxArgs + 1)
-            val resp = c.check(message, arguments.size)
+            val resp = c.check(message, arguments.size - 1)
             if(resp != "") {
                 message.channel.block()?.createMessage(resp)?.block()
                 return@subscribe
