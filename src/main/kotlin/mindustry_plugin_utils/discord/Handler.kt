@@ -34,7 +34,7 @@ class Handler(
             val arguments = message.content.split(" ", limit = c.maxArgs + 1)
             val resp = c.check(message, arguments.size)
             if(resp != "") {
-                message.channel.block()?.createMessage("$resp structure: ${c.args}")?.block()
+                message.channel.block()?.createMessage(resp)?.block()
                 return@subscribe
             }
 
@@ -89,11 +89,11 @@ class Handler(
             }
 
             if(attachment && message.attachments.isEmpty()) {
-                return "You are missing an attachment."
+                return "You are missing an attachment. structure: ${args}\""
             }
 
             if (argumentCount < minArgs) {
-                return "Too few arguments."
+                return "Too few arguments. structure: ${args}\""
             }
 
             return ""

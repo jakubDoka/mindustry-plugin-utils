@@ -19,4 +19,12 @@ class TemplatesTest {
     fun transition() {
         println(Templates.transition("and this works too", "#ffffff", "#ff00ff", "#00ff00", density = 3))
     }
+
+    @Test
+    fun cleaning() {
+        assert("hello there" == Templates.cleanColors("hello [green]there"))
+        assert("hello [[green]there" == Templates.cleanColors("hello [[green]there"))
+        assert("hello there" == Templates.cleanEmotes("hello <green>there"))
+        assert("hello there" == Templates.cleanName("hello <blue>[green]there"))
+    }
 }

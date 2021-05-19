@@ -3,8 +3,17 @@ package mindustry_plugin_utils
 import java.lang.Integer.max
 import java.lang.Integer.min
 import java.lang.StringBuilder
+import java.util.regex.Pattern
 
 object Templates {
+    val color = "(?<!\\[)\\[[^\\[.]*\\]"
+    val rank = "<.*>"
+    val all = "($color|$rank)"
+
+    val colorR = Pattern.compile(color)
+    val rankR = Pattern.compile(rank)
+    val allR = Pattern.compile(all)
+
     fun page(title: String, lines: Array<String>, cap: Int, index: Int, color :String = "orange", comment: String = ""): String {
         val count = lines.size / cap
         val max = if(count * cap < lines.size) count else count + 1
@@ -23,33 +32,16 @@ object Templates {
         return "[$color]==$title==[]\n\n$body"
     }
 
-    fun clean(string: String, begin: String?, end: String?): String {
-        var string = string
-        var fromBegin = 0
-        var fromEnd = 0
-        while (string.contains(begin!!)) {
-            val first = string.indexOf(begin, fromBegin)
-            val last = string.indexOf(end!!, fromEnd)
-            if (first == -1 || last == -1) break
-            if (first > last) {
-                fromBegin = first + 1
-                fromEnd = last + 1
-            }
-            string = string.substring(0, first) + string.substring(last + 1)
-        }
-        return string
-    }
-
     fun cleanEmotes(string: String): String {
-        return clean(string, "<", ">")
+        return rankR.matcher(string).replaceAll("")
     }
 
     fun cleanColors(string: String): String {
-        return clean(string, "[", "]")
+        return colorR.matcher(string).replaceAll("")
     }
 
     fun cleanName(name: String): String {
-        return cleanEmotes(cleanColors(name)).replace(" ", "_")
+        return allR.matcher(name).replaceAll("")
     }
 
     fun Long.time(): String {
@@ -76,8 +68,6 @@ object Templates {
 
         return sb.toString()
     }
-
-
 
     class Color(
         val r: Double = 1.0,
