@@ -7,7 +7,7 @@ import java.util.regex.Pattern
 
 object Templates {
     val color = "(?<!\\[)\\[[^\\[.]*\\]"
-    val rank = "<.*>"
+    val rank = "[＜<].*[>＞]"
     val all = "($color|$rank)"
 
     val colorR = Pattern.compile(color)
