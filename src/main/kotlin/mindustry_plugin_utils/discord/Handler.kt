@@ -1,8 +1,11 @@
 package mindustry_plugin_utils.discord
 
+import discord4j.common.util.Snowflake
 import discord4j.core.DiscordClient
 import discord4j.core.GatewayDiscordClient
 import discord4j.core.`object`.entity.Message
+import discord4j.core.`object`.entity.channel.GuildChannel
+import discord4j.core.`object`.entity.channel.MessageChannel
 import discord4j.core.event.domain.message.MessageCreateEvent
 import java.util.*
 import kotlin.collections.HashMap
@@ -12,14 +15,29 @@ class Handler(
     val token: String,
     val prefix: String = "!",
     val notKnowMessage: String = "I don't know this command.",
+    val commandChannel: String = "",
+    val loadChannels: Map<String, String> = mapOf(),
 ): HashMap<String, Handler.Cmd>() {
     val client = DiscordClient.create(token)
     val gateway = client.login().block()!!
+    val channels = HashMap<String, GuildChannel>()
+    val commands = gateway.guilds.blockFirst()?.getChannelById(Snowflake.of(commandChannel))?.block()
 
     fun launch() {
+        for((k, v) in loadChannels) {
+            var chan = gateway.guilds.blockFirst()?.getChannelById(Snowflake.of(v))?.block()
+            if (chan != null) {
+                channels[k] = chan
+            }
+        }
         gateway.on(MessageCreateEvent::class.java).subscribe{
             val message = it.message
             if(!message.content.startsWith(prefix) || message.content.length <= prefix.length || !message.content[prefix.length].isLetter() || message.author.get().isBot) {
+                return@subscribe
+            }
+
+            if(commands != null && message.channelId.asString() != commandChannel) {
+                message.channel.block()?.createMessage("This is not a channel for commands. Go to ${commands.name}.")?.block()
                 return@subscribe
             }
 
