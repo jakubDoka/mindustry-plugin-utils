@@ -23,14 +23,16 @@ class Handler(
     val channels = HashMap<String, GuildChannel>()
     val commands = channel(commandChannel)
 
-    fun launch() {
+    init {
         for((k, v) in loadChannels) {
-            var chan = channel(v)
-            if (chan != null) {
-                channels[k] = chan
+            val ch = channel(v)
+            if (ch != null) {
+                channels[k] = ch
             }
         }
+    }
 
+    fun launch() {
         gateway.on(MessageCreateEvent::class.java).subscribe{
             val message = it.message
             if(!message.content.startsWith(prefix) || message.content.length <= prefix.length || !message.content[prefix.length].isLetter() || message.author.get().isBot) {
