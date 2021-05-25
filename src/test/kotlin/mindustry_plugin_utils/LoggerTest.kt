@@ -25,8 +25,9 @@ class LoggerTest{
 
     @Test
     fun discord() {
-        val h = Handler("Njg5NzQ3OTA4ODU3MTY3OTE0.XnHXzA.FYWNxsUnjicpkcIKjPC7ty3mr_g", commandChannel = "551880313161121884", loadChannels = mapOf(
-            "a" to "551880313161121884"
+        val h = Handler("Njg5NzQ3OTA4ODU3MTY3OTE0.XnHXzA.Y3vD6oDbcUq9lgcA_RGF6p8cLLI", commandChannel = "551880313161121884", loadChannels = mapOf(
+            "a" to "551880313161121884",
+            "ho" to "its not a valid snowflake"
         ))
         h.reg(object: Handler.Cmd("hello", "<f> [k] {l}", "says hello") {
             override fun run(message: Message, arguments: List<String>) {

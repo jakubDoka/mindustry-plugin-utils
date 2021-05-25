@@ -21,15 +21,16 @@ class Handler(
     val client = DiscordClient.create(token)
     val gateway = client.login().block()!!
     val channels = HashMap<String, GuildChannel>()
-    val commands = gateway.guilds.blockFirst()?.getChannelById(Snowflake.of(commandChannel))?.block()
+    val commands = channel(commandChannel)
 
     fun launch() {
         for((k, v) in loadChannels) {
-            var chan = gateway.guilds.blockFirst()?.getChannelById(Snowflake.of(v))?.block()
+            var chan = channel(v)
             if (chan != null) {
                 channels[k] = chan
             }
         }
+
         gateway.on(MessageCreateEvent::class.java).subscribe{
             val message = it.message
             if(!message.content.startsWith(prefix) || message.content.length <= prefix.length || !message.content[prefix.length].isLetter() || message.author.get().isBot) {
@@ -61,6 +62,21 @@ class Handler(
         gateway.onDisconnect().block()
     }
 
+    fun channel(snowflake: String): GuildChannel? {
+        return try {
+            gateway.guilds.blockFirst()?.getChannelById(optSnow(commandChannel))?.block()
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun optSnow(string: String): Snowflake {
+        return try {
+            Snowflake.of(string)
+        } catch (e: Exception) {
+            Snowflake.of(0)
+        }
+    }
 
     fun reg(cmd: Cmd) {
         put(cmd.name, cmd)
