@@ -66,7 +66,7 @@ class Handler(
 
     fun channel(snowflake: String): GuildChannel? {
         return try {
-            gateway.guilds.blockFirst()?.getChannelById(optSnow(commandChannel))?.block()
+            gateway.guilds.blockFirst()?.getChannelById(optSnow(snowflake))?.block()
         } catch (e: Exception) {
             null
         }

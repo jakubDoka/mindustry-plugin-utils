@@ -25,7 +25,7 @@ class LoggerTest{
 
     @Test
     fun discord() {
-        val h = Handler("Njg5NzQ3OTA4ODU3MTY3OTE0.XnHXzA.Y3vD6oDbcUq9lgcA_RGF6p8cLLI", commandChannel = "551880313161121884", loadChannels = mapOf(
+        val h = Handler("Njg5NzQ3OTA4ODU3MTY3OTE0.XnHXzA.y2X9_Ux9ddAKg3I94MaTmd9ns88", commandChannel = "551880313161121884", loadChannels = mapOf(
             "a" to "551880313161121884",
             "ho" to "its not a valid snowflake"
         ))
