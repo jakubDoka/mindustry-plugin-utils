@@ -103,7 +103,7 @@ class Handler(
                     maxArgs++
                 } else if(p.first() == '{' && p.last() == '}') {
                     attachment = true
-                } else {
+                } else if(p.first() != '|' || p.last() != '|'){
                     throw IllegalArgumentException("There cannot be any spaces within argument definitions. Only tree types are allowed '<>', '[]' and '{}'")
                 }
             }
