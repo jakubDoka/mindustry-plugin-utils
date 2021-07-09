@@ -10,7 +10,7 @@ import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Logger(configRelativePath: String) {
+class Logger(configRelativePath: String): Messenger("logger") {
     var config: Config
     private var format: SimpleDateFormat
     private lateinit var messenger: Messenger
@@ -18,22 +18,14 @@ class Logger(configRelativePath: String) {
     init {
         try {
             config =  Klaxon().parse<Config>(File(configRelativePath))!!
-            initMessenger(config.verbose)
         } catch (e: Exception) {
             config = Config()
-            initMessenger(false)
-            messenger.log("error when opening config file: " + e.message)
-            messenger.verbose {
-                e.printStackTrace()
-            }
+            log("error when opening config file: " + e.message)
+            e.printStackTrace()
             Fs.createDefault(configRelativePath, config)
         }
 
         format = SimpleDateFormat(config.time_format)
-    }
-
-    private fun initMessenger(verbose: Boolean) {
-        messenger = Messenger("Logger", "add '\"verbose\": true' to config to see error messages", verbose)
     }
 
     fun run(r: () -> Unit) {
@@ -88,9 +80,7 @@ class Logger(configRelativePath: String) {
             f.appendText(">>> [$time]\n")
             f.appendText(ex)
 
-           messenger.verbose {
-               println(ex)
-           }
+           println(ex)
         } catch (e: Exception) {
             messenger.log("Unable to create file.")
             e.printStackTrace()
@@ -114,7 +104,6 @@ class Logger(configRelativePath: String) {
         val output: String = "logOutput",
         var kind: Kind = Kind.Default,
         val time_format: String = "yyyy-MM-dd/hh/mm-ss-SSS",
-        val verbose: Boolean = false
     )
 
     enum class Kind {
