@@ -10,7 +10,7 @@ repositories {
 }
 
 var junitVersion = "5.6.1"
-var mindustryVer = "v126.2"
+var mindustryVer = "v128.1"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
