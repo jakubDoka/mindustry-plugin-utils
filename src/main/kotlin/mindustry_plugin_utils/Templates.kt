@@ -25,7 +25,7 @@ object Templates {
             sb.append(lines[i]).append("\n")
         }
 
-        return info(title, sb.toString(), color)
+        return info(title + "[${id+1}/$max]", sb.toString(), color)
     }
 
     fun info(title: String, body: String, color: String = "orange"): String {
