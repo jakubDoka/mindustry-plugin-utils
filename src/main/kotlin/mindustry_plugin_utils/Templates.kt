@@ -16,7 +16,7 @@ object Templates {
 
     fun page(title: String, lines: Array<String>, cap: Int, index: Int, color :String = "orange", comment: String = ""): String {
         val count = lines.size / cap
-        val max = if(count * cap < lines.size) count else count + 1
+        val max = if(count * cap < lines.size) count else count - 1
         val id = max(min(max, index - 1), 0)
 
         val sb = StringBuilder()
@@ -25,7 +25,7 @@ object Templates {
             sb.append(lines[i]).append("\n")
         }
 
-        return info(title + "[${id+1}/$max]", sb.toString(), color)
+        return info(title + "[${id+1}/${max+1}]", sb.toString(), color)
     }
 
     fun info(title: String, body: String, color: String = "orange"): String {
